@@ -1,5 +1,9 @@
 require 'sinatra'
 
-get '/' do
-	"Hello World#{params[:name]}"
+class HelloWorld < Sinatra::Base
+
+	get '/' do
+		"Hello World#{params[:name]}"
+	end
+
 end
