@@ -24,19 +24,6 @@ task :git => :ruby_dependencies do
 	git.push
 end
 
-def run_website(&block)			
-	sh 'ruby myapp.rb &'
-	begin
-		block.call
-	rescue
-		puts 'NOT FEATURE COMPLETE'
-		puts 'Hit ENTER to continue'
-		gets.chomp
-	ensure
-		sh "pkill ruby"
-	end
-end
-
 def rake_sh(command)
 	sh command, @run_options
 end
