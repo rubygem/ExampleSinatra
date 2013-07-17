@@ -7,12 +7,9 @@ task :ruby_dependencies do
 end
 
 task :test do
-	run_website do
-		sleep(2)
-		#Dir.glob('./tests/*.rb').each do |test|
-		#	sh 'ruby '+test
-		#end
-	end	
+	Dir.glob('./tests/*.rb').each do |test|
+		sh 'ruby '+test
+	end
 end
 
 task :git => :ruby_dependencies do 
