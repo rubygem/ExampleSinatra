@@ -18,4 +18,16 @@ class RackTests < Test::Unit::TestCase
     browser.get '/', :name => 'Simon'
     assert browser.last_response.body.include?('Simon')
   end
+
+  def test_sends_name_to_my_dependency
+  	browser = Rack::Test::Session.new(Rack::MockSession.new(HelloWorld.new(self)))
+    browser.get '/save_name', :name => 'Bob'  
+    assert browser.last_response.ok?
+  	assert_equal('bob', @name)
+  end
+
+  def set_name(name)
+  	@name = name
+  end
+
 end
