@@ -2,23 +2,37 @@ require_relative '../src/hello_world'
 require 'test/unit'
 require 'rack/test'
 
-ENV['RACK_ENV'] = 'test'
+set :environment, :test
 
-class HelloWorldTest < Test::Unit::TestCase
-  include Rack::Test::Methods
-
-  def app
-    Sinatra::Application
-  end
+class RackTests < Test::Unit::TestCase
 
   def test_it_says_hello_world
-    get '/'
-    assert last_response.ok?
-    assert_equal 'Hello World', last_response.body
+    browser = Rack::Test::Session.new(Rack::MockSession.new(Sinatra::Application))
+    browser.get '/'
+    assert browser.last_response.ok?
+    assert_equal 'Hello World', browser.last_response.body
   end
 
   def test_it_says_hello_to_a_person
-    get '/', :name => 'Simon'
-    assert last_response.body.include?('Simon')
+    browser = Rack::Test::Session.new(Rack::MockSession.new(Sinatra::Application))
+    browser.get '/', :name => 'Simon'
+    assert browser.last_response.body.include?('Simon')
   end
+end
+
+class HelloWorldTest < Test::Unit::TestCase
+	require 'capybara'
+	require 'capybara/dsl'
+
+	include Capybara::DSL
+	# Capybara.default_driver = :selenium # <-- use Selenium driver
+
+	def setup
+		Capybara.app = Sinatra::Application.new
+	end
+
+	def test_it_works
+		visit '/'
+		assert page.has_content?('Hello World')
+	end
 end
